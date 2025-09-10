@@ -1,14 +1,24 @@
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.Functions.Worker.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using api.Data;
+using api.Services;
 
-var builder = FunctionsApplication.CreateBuilder(args);
+var host = new HostBuilder()
+    .ConfigureFunctionsWebApplication()
+    .ConfigureServices((context, services) =>
+    {
+        services.AddApplicationInsightsTelemetryWorkerService();
+        services.ConfigureFunctionsApplicationInsights();
 
-builder.ConfigureFunctionsWebApplication();
+        // Add DbContext
+        services.AddDbContext<PersonDbContext>(options =>
+            options.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection")));
 
-builder.Services
-    .AddApplicationInsightsTelemetryWorkerService()
-    .ConfigureFunctionsApplicationInsights();
+        // Add services
+        services.AddScoped<IPersonService, PersonService>();
+    })
+    .Build();
 
-builder.Build().Run();
+host.Run();
