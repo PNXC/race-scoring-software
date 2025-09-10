@@ -3,35 +3,59 @@ CREATE TABLE [person] (
   [first_name] nvarchar(255),
   [last_name] nvarchar(255),
   [email] nvarchar(255),
-  [phone_number] nvarchar(255)
+  [phone_number] nvarchar(255),
+  [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
+  [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
+  [change_user] nvarchar(255) NULL,
+  [change_datetime] datetime2 NULL,
+  [ValidFrom] datetime2 GENERATED ALWAYS AS ROW START NOT NULL,
+  [ValidTo] datetime2 GENERATED ALWAYS AS ROW END NOT NULL,
+  PERIOD FOR SYSTEM_TIME ([ValidFrom], [ValidTo])
 )
+WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = dbo.person_history));
 GO
 
 CREATE TABLE [tag_type] (
   [tag_type_id] int PRIMARY KEY IDENTITY(1, 1),
-  [name] nvarchar(255)
-)
+  [name] nvarchar(255),
+  [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
+  [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
+  [change_user] nvarchar(255) NULL,
+  [change_datetime] datetime2 NULL
+);
 GO
 
 CREATE TABLE [tag] (
   [tag_id] int PRIMARY KEY IDENTITY(1, 1),
   [name] nvarchar(255),
-  [tag_type_id] int
-)
+  [tag_type_id] int,
+  [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
+  [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
+  [change_user] nvarchar(255) NULL,
+  [change_datetime] datetime2 NULL
+);
 GO
 
 CREATE TABLE [person_tag] (
   [person_tag_id] int PRIMARY KEY IDENTITY(1, 1),
   [person_id] int,
-  [tag_id] int
-)
+  [tag_id] int,
+  [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
+  [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
+  [change_user] nvarchar(255) NULL,
+  [change_datetime] datetime2 NULL
+);
 GO
 
 CREATE TABLE [event] (
   [event_id] int PRIMARY KEY IDENTITY(1, 1),
   [name] nvarchar(255),
-  [event_date] date
-)
+  [event_date] date,
+  [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
+  [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
+  [change_user] nvarchar(255) NULL,
+  [change_datetime] datetime2 NULL
+);
 GO
 
 CREATE TABLE [event_result] (
@@ -39,41 +63,41 @@ CREATE TABLE [event_result] (
   [event_id] int,
   [person_id] int,
   [time_seconds] int,
-  [ordinal] int
-)
+  [ordinal] int,
+  [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
+  [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
+  [change_user] nvarchar(255) NULL,
+  [change_datetime] datetime2 NULL
+);
 GO
 
 CREATE TABLE [family] (
   [family_id] int PRIMARY KEY IDENTITY(1, 1),
-  [family_name] nvarchar(255)
-)
+  [family_name] nvarchar(255),
+  [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
+  [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
+  [change_user] nvarchar(255) NULL,
+  [change_datetime] datetime2 NULL
+);
 GO
 
 CREATE TABLE [person_family] (
   [person_family_id] int PRIMARY KEY IDENTITY(1, 1),
   [person_id] int,
   [family_id] int,
-  [role] nvarchar(255)
-)
+  [role] nvarchar(255),
+  [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
+  [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
+  [change_user] nvarchar(255) NULL,
+  [change_datetime] datetime2 NULL
+);
 GO
 
-ALTER TABLE [person_tag] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id])
-GO
-
-ALTER TABLE [person_tag] ADD FOREIGN KEY ([tag_id]) REFERENCES [tag] ([tag_id])
-GO
-
-ALTER TABLE [tag] ADD FOREIGN KEY ([tag_type_id]) REFERENCES [tag_type] ([tag_type_id])
-GO
-
-ALTER TABLE [event_result] ADD FOREIGN KEY ([event_id]) REFERENCES [event] ([event_id])
-GO
-
-ALTER TABLE [event_result] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id])
-GO
-
-ALTER TABLE [person_family] ADD FOREIGN KEY ([family_id]) REFERENCES [family] ([family_id])
-GO
-
-ALTER TABLE [person_family] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id])
+ALTER TABLE [person_tag] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id]);
+ALTER TABLE [person_tag] ADD FOREIGN KEY ([tag_id]) REFERENCES [tag] ([tag_id]);
+ALTER TABLE [tag] ADD FOREIGN KEY ([tag_type_id]) REFERENCES [tag_type] ([tag_type_id]);
+ALTER TABLE [event_result] ADD FOREIGN KEY ([event_id]) REFERENCES [event] ([event_id]);
+ALTER TABLE [event_result] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id]);
+ALTER TABLE [person_family] ADD FOREIGN KEY ([family_id]) REFERENCES [family] ([family_id]);
+ALTER TABLE [person_family] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id]);
 GO
