@@ -1,5 +1,5 @@
 ﻿using api.Data;
-using api.DTOs;
+using api.DTOs.Person;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -72,6 +72,29 @@ namespace api.Services
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<List<PersonDto>> FindPeople(PersonSearchDto search)
+        {
+            var query = _context.Persons.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search.FirstName))
+            {
+                query = query.Where(p => p.FirstName != null && p.FirstName.Contains(search.FirstName));
+            }
+
+            if (!string.IsNullOrEmpty(search.LastName))
+            {
+                query = query.Where(p => p.LastName != null && p.LastName.Contains(search.LastName));
+            }
+
+            if (!string.IsNullOrEmpty(search.Email))
+            {
+                query = query.Where(p => p.Email != null && p.Email.Contains(search.Email));
+            }
+
+            var persons = await query.ToListAsync();
+            return persons.Select(MapToDto).ToList();
         }
 
         private static PersonDto MapToDto(Person person)

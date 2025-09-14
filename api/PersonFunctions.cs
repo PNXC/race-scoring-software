@@ -1,4 +1,4 @@
-using api.DTOs;
+using api.DTOs.Person;
 using api.Services;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;

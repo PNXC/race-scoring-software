@@ -1,4 +1,4 @@
-﻿using api.DTOs;
+﻿using api.DTOs.Person;
 
 namespace api.Services
 {
@@ -9,5 +9,6 @@ namespace api.Services
         Task<PersonDto> CreatePersonAsync(CreatePersonDto createPersonDto, string currentUser);
         Task<PersonDto?> UpdatePersonAsync(int id, UpdatePersonDto updatePersonDto, string currentUser);
         Task<bool> DeletePersonAsync(int id);
+        Task<List<PersonDto>> FindPeople(PersonSearchDto search);
     }
 }
