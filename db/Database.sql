@@ -36,10 +36,10 @@ CREATE TABLE [tag] (
 );
 GO
 
-CREATE TABLE [person_tag] (
-  [person_tag_id] int PRIMARY KEY IDENTITY(1, 1),
-  [person_id] int,
-  [tag_id] int,
+CREATE TABLE [event] (
+  [event_id] int PRIMARY KEY IDENTITY(1, 1),
+  [name] nvarchar(255),
+  [event_date] date,
   [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
   [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
   [change_user] nvarchar(255) NULL,
@@ -47,10 +47,10 @@ CREATE TABLE [person_tag] (
 );
 GO
 
-CREATE TABLE [event] (
-  [event_id] int PRIMARY KEY IDENTITY(1, 1),
-  [name] nvarchar(255),
-  [event_date] date,
+CREATE TABLE [event_registration] (
+  [event_registration_id] int PRIMARY KEY IDENTITY(1, 1),
+  [event_id] int,
+  [person_id] int,
   [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
   [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
   [change_user] nvarchar(255) NULL,
@@ -64,6 +64,29 @@ CREATE TABLE [event_result] (
   [person_id] int,
   [time_seconds] int,
   [ordinal] int,
+  [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
+  [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
+  [change_user] nvarchar(255) NULL,
+  [change_datetime] datetime2 NULL
+);
+GO
+
+CREATE TABLE [event_registration_tag] (
+  [event_registration_tag_id] int PRIMARY KEY IDENTITY(1, 1),
+  [event_registration_id] int,
+  [tag_id] int,
+  [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
+  [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
+  [change_user] nvarchar(255) NULL,
+  [change_datetime] datetime2 NULL
+);
+GO
+
+CREATE TABLE [event_medal_tag] (
+  [event_medal_tag_id] int PRIMARY KEY IDENTITY(1, 1),
+  [event_id] int,
+  [tag_type_id] int,
+  [number_medals] int,
   [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
   [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
   [change_user] nvarchar(255) NULL,
@@ -93,11 +116,16 @@ CREATE TABLE [person_family] (
 );
 GO
 
-ALTER TABLE [person_tag] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id]);
-ALTER TABLE [person_tag] ADD FOREIGN KEY ([tag_id]) REFERENCES [tag] ([tag_id]);
 ALTER TABLE [tag] ADD FOREIGN KEY ([tag_type_id]) REFERENCES [tag_type] ([tag_type_id]);
 ALTER TABLE [event_result] ADD FOREIGN KEY ([event_id]) REFERENCES [event] ([event_id]);
 ALTER TABLE [event_result] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id]);
 ALTER TABLE [person_family] ADD FOREIGN KEY ([family_id]) REFERENCES [family] ([family_id]);
 ALTER TABLE [person_family] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id]);
+ALTER TABLE [event_registration] ADD FOREIGN KEY ([event_id]) REFERENCES [event] ([event_id]);
+ALTER TABLE [event_registration] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id]);
+
+ALTER TABLE [event_registration_tag] ADD FOREIGN KEY ([event_registration_id]) REFERENCES [event_registration] ([event_registration_id]);
+ALTER TABLE [event_registration_tag] ADD FOREIGN KEY ([tag_id]) REFERENCES [tag] ([tag_id]);
+ALTER TABLE [event_medal_tag] ADD FOREIGN KEY ([event_id]) REFERENCES [event] ([event_id]);
+ALTER TABLE [event_medal_tag] ADD FOREIGN KEY ([tag_type_id]) REFERENCES [tag_type] ([tag_type_id]);
 GO
