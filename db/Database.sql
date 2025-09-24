@@ -1,3 +1,20 @@
+DROP TABLE IF EXISTS event_result;
+DROP TABLE IF EXISTS event_medal_tag;
+DROP TABLE IF EXISTS event_registration_tag;
+DROP TABLE IF EXISTS event_registration;
+DROP TABLE IF EXISTS event;
+DROP TABLE IF EXISTS tag;
+DROP TABLE IF EXISTS tag_type;
+DROP TABLE IF EXISTS person_family;
+DROP TABLE IF EXISTS family;
+IF OBJECT_ID('dbo.Person', 'U') IS NOT NULL
+BEGIN
+    ALTER TABLE Person
+    SET (SYSTEM_VERSIONING = OFF);
+    DROP TABLE Person;
+END
+GO
+
 CREATE TABLE [person] (
   [person_id] int PRIMARY KEY IDENTITY(1, 1),
   [first_name] nvarchar(255),
@@ -40,6 +57,7 @@ CREATE TABLE [event] (
   [event_id] int PRIMARY KEY IDENTITY(1, 1),
   [name] nvarchar(255),
   [event_date] date,
+  [location] nvarchar(255),
   [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
   [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
   [change_user] nvarchar(255) NULL,
