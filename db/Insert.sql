@@ -40,6 +40,11 @@ GO
 CREATE TABLE #StagingCountry(Name VARCHAR(100), Country VARCHAR(100), person_id int, tag_id int)
 GO
 
+DROP TABLE IF EXISTS #StagingResults;
+GO
+CREATE TABLE #StagingResults(Name VARCHAR(100), Time VARCHAR(100), Place decimal(5,1), FirstName VARCHAR(100), LastName VARCHAR(100), person_id int, time_seconds int)
+GO
+
 INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Cal Anderson','10:20','Jr/Sr','Male','','')
 INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Ivy Anderson','0:00','6th/7th Grade','Female','','')
 INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Dylan Araiza','11:11','Jr/Sr','Male','','')
@@ -329,7 +334,116 @@ insert into #StagingCountry (Name, Country) values ('Diviya Wishart','Barbados')
 insert into #StagingCountry (Name, Country) values ('Skylyn Worden','New Zealand')
 insert into #StagingCountry (Name, Country) values ('Sedona Worden','New Zealand')
 insert into #StagingCountry (Name, Country) values ('Zeta Zbroszczyk','Yemen')
-
+GO
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Thomas Czerwinski','9:51',1)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Gavin Hall','10:02',2)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('James Maso','10:06',3)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Aidan Connors','10:07',4)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Dominic Frigo','10:12',5)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Cal Anderson','10:20',6)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Liam Beavers','10:22',7)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Aidan Kyrychenko','10:36',8)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Sean Jansen','10:49',9)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Quinn Davis','10:52',10)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Andy Derks','10:55',11)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Mitchell Rudland','10:58',12)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Sam Barranco','11:04',13)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Biruk Melak','11:11',14)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Dylan Araiza','11:11',15)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('AJ Hartmann','11:14',16)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Zach Bucsanyi','11:24',17)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Karl Miller','11:29',18)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Logan Dodson','11:31',19)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Easton MIller','11:33',20)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Jake Schmauderer','11:35',21)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Chase Hemmer','11:35',22)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Ben Damiani','11:47',23)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Austin Krumin','11:50',24)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Marlie Czarniewski','11:59',25)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Matt Hemmer','12:04',26)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Ayla Czarniewski','12:11',27)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Alex Silva','12:17',28)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Sean Bruyere','12:22',29)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Kate Beavers','12:24',30)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Ethan Fuentes','12:25',31)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Tessa Russo','12:27',32)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Ryan Czerwinski','12:28',33)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Olan Bruyere','12:35',34)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Madeline Gatlin','12:35',35)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Laurel Eager','12:38',36)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Nathaniel Lenning','12:41',37)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Jack Honiotes','12:43',38)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Olivia Eager','12:44',39)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Alex Drescher','12:48',40)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Zeta Zbroszczyk','13:00',41)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Wyatt Knowles','13:08',42)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Troy Wilson','13:10',43)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Oliver Smith','13:15',44)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Anthony Russo','13:15',45)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Nathan Alli','13:22',46)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Tino Russo','13:34',46.5)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Emaan Hussain','13:37',47)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Lucas Murphy','13:43',48)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Madeline Singh','13:45',49)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Roxanne Hall','13:46',50)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Aidan Rosas','14:08',51)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Chris Eager','14:09',52)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Kyle Bender','14:11',53)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Griffin Kreml','14:18',54)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Serena Eggert','14:26',55)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Maverick Hall','14:30',56)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Blake Thill','14:31',57)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Pete Kyrychenko','14:34',58)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Eliza Boyk','14:36',59)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Aven Thomas','14:37',60)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Skylyn Worden','14:39',61)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Ben Gatlin','14:46',62)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Tim Hatcher','14:48',63)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Gino Frigo','14:52',64)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Evan Reneau','14:53',65)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Jeff Eggert','14:59',66)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Mallory Weitzmann','15:05',67)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Andree Hernandez','15:21',68)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Pete Honiotes','15:22',69)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Karston Zero','15:26',70)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Logan DeRose','15:30',71)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Luke Hartmann','15:31',72)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Presley Hartzold','15:32',73)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Adianna Santini','15:35',74)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Kendra Frigo','15:36',75)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Adam Haar','15:43',76)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Sedona Worden','15:47',77)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Maddy Cairo','15:55',78)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Maddie Derks','15:57',79)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Jacob Czerwinski','16:02',80)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Ian Hatzl','16:02',81)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Mia Hemmer','16:03',82)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Ian Bailey','16:04',83)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Lucy Eager','16:15',84)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Joe Maso','16:36',85)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Jasleen Sanghera','16:46',86)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Sierra Worden','16:51',87)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Giu Giu Russo','16:52',88)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('James Beavers','17:02',89)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Hank Kreml','17:05',90)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Keshav Shah','17:05',91)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Alice Eager','17:05',92)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Drew Derks','17:06',93)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Emily Beavers','17:06',94)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Kevin Thill','17:18',96)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Brian Kreml','17:37',97)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Shawn Edwards','17:39',98)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Jocelyn Hatcher','17:43',99)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Payton Ulaszek','17:47',100)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Dan Ulaszek','17:47',101)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Matthew Rodriguez','17:57',102)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Kim Hatcher','18:02',103)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Jon Richardson','19:22',104)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Avery Thomas','21:14',105)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Diana Silva','21:26',106)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Froylan Silva','21:47',107)
+INSERT INTO #StagingResults(Name, Time, Place) VALUES ('Laurie Kreml','22:50',108)
+GO
 update #StagingPerson
 set Parent1 = null
 where Parent1 = ''
@@ -481,3 +595,20 @@ set dad_person_id = sp.dad_person_id,
 from person p
 join #StagingPerson sp
 	on p.person_id = sp.person_id
+
+update #StagingResults
+SET FirstName = LEFT(Name, LEN(Name) - CHARINDEX(' ', REVERSE(Name))),
+    LastName = RIGHT(Name, CHARINDEX(' ', REVERSE(Name)) - 1),
+	time_seconds = CAST(LEFT(Time, CHARINDEX(':', Time) - 1) AS INT) * 60 +
+    CAST(RIGHT(Time, LEN(Time) - CHARINDEX(':', Time)) AS INT)  
+
+update sr
+set person_id = p.person_id
+from #StagingResults sr
+join person p 
+	on sr.FirstName = p.first_name
+	and sr.LastName = p.last_name
+
+insert into event_result(event_id, person_id, time_seconds, place, entry_user, entry_datetime, change_user, change_datetime)
+select 1, sr.person_id, sr.time_seconds, sr.Place, 'jimgaull', getdate(), 'jimgaull', getdate()
+from #StagingResults sr
