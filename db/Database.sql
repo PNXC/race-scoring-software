@@ -5,13 +5,13 @@ DROP TABLE IF EXISTS event_registration;
 DROP TABLE IF EXISTS event;
 DROP TABLE IF EXISTS tag;
 DROP TABLE IF EXISTS tag_type;
-DROP TABLE IF EXISTS person_family;
-DROP TABLE IF EXISTS family;
+
 IF OBJECT_ID('dbo.Person', 'U') IS NOT NULL
 BEGIN
     ALTER TABLE Person
     SET (SYSTEM_VERSIONING = OFF);
     DROP TABLE Person;
+	DROP TABLE person_history;
 END
 GO
 
@@ -21,6 +21,8 @@ CREATE TABLE [person] (
   [last_name] nvarchar(255),
   [email] nvarchar(255),
   [phone_number] nvarchar(255),
+  [mom_person_id] int,
+  [dad_person_id] int,
   [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
   [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
   [change_user] nvarchar(255) NULL,
@@ -105,28 +107,7 @@ CREATE TABLE [event_medal_tag] (
   [event_id] int,
   [tag_type_id] int,
   [number_medals] int,
-  [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
-  [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
-  [change_user] nvarchar(255) NULL,
-  [change_datetime] datetime2 NULL
-);
-GO
-
-CREATE TABLE [family] (
-  [family_id] int PRIMARY KEY IDENTITY(1, 1),
-  [family_name] nvarchar(255),
-  [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
-  [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
-  [change_user] nvarchar(255) NULL,
-  [change_datetime] datetime2 NULL
-);
-GO
-
-CREATE TABLE [person_family] (
-  [person_family_id] int PRIMARY KEY IDENTITY(1, 1),
-  [person_id] int,
-  [family_id] int,
-  [role] nvarchar(255),
+  [score_type] char(1), -- 'I' (Score as Individual), 'T' (Score as Team)
   [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
   [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
   [change_user] nvarchar(255) NULL,
@@ -137,8 +118,6 @@ GO
 ALTER TABLE [tag] ADD FOREIGN KEY ([tag_type_id]) REFERENCES [tag_type] ([tag_type_id]);
 ALTER TABLE [event_result] ADD FOREIGN KEY ([event_id]) REFERENCES [event] ([event_id]);
 ALTER TABLE [event_result] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id]);
-ALTER TABLE [person_family] ADD FOREIGN KEY ([family_id]) REFERENCES [family] ([family_id]);
-ALTER TABLE [person_family] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id]);
 ALTER TABLE [event_registration] ADD FOREIGN KEY ([event_id]) REFERENCES [event] ([event_id]);
 ALTER TABLE [event_registration] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id]);
 
