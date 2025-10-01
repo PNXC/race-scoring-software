@@ -83,7 +83,7 @@ CREATE TABLE [event_result] (
   [event_id] int,
   [person_id] int,
   [time_seconds] int,
-  [ordinal] int,
+  [place] decimal(5,1),
   [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
   [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
   [change_user] nvarchar(255) NULL,
