@@ -4,21 +4,31 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using api.Data;
 using api.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 
-var host = new HostBuilder()
-    .ConfigureFunctionsWebApplication()
-    .ConfigureServices((context, services) =>
+public partial class Program
+{
+    public static void Main(params string[] args)
     {
-        services.AddApplicationInsightsTelemetryWorkerService();
-        services.ConfigureFunctionsApplicationInsights();
+        var builder = WebApplication.CreateBuilder(args);
+        var connectionString = builder.Configuration.GetConnectionString("PnxcDb");
 
-        // Add DbContext
-        services.AddDbContext<PersonDbContext>(options =>
-            options.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection")));
+        var host = new HostBuilder()
+            .ConfigureFunctionsWebApplication()
+            .ConfigureServices((context, services) =>
+            {
+                services.AddApplicationInsightsTelemetryWorkerService();
+                services.ConfigureFunctionsApplicationInsights();
 
-        // Add services
-        services.AddScoped<IPersonService, PersonService>();
-    })
-    .Build();
+                // Add DbContext
+                services.AddDbContext<PersonDbContext>(options => options.UseSqlServer(connectionString));
 
-host.Run();
+                // Add services
+                services.AddScoped<IPersonService, PersonService>();
+            })
+            .Build();
+
+        host.Run();        
+    }
+}
