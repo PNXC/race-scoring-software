@@ -1,0 +1,6 @@
+.grid-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 30vw;
+    gap: 5px;
+}
