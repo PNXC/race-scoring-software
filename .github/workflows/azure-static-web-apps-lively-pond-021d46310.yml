@@ -45,3 +45,31 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_POND_021D46310 }}
           action: "close"
 
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install Azure Functions Core Tools
+        run: npm install -g azure-functions-core-tools@4 --unsafe-perm true
+
+      - name: Build code
+        working-directory: api
+        run: dotnet build
+
+      - name: Build tests
+        working-directory: tests
+        run: dotnet build
+
+      - name: Start Functions Host
+        working-directory: api
+        run: func start --port 7071 &
+      
+      - name: Run Integration Tests
+        working-directory: tests
+        run: dotnet test
