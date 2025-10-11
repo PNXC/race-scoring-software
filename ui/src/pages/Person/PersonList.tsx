@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Page from "../Page";
 import { PersonDto } from "../../dto/person";
 import api from "../../api/api";
 import Button from "../../components/Button/Button";
+import { FaPencil } from "react-icons/fa6";
+import { FaTrashAlt } from "react-icons/fa";
 
 const PersonList = () => {
     const [people, setPeople] = useState<PersonDto[]>([]);
 
-    useEffect(() => {
-        async function run() {
-            const getPeopleResponse = await api.getPeople();
-            setPeople(getPeopleResponse);
-        }
-        
-        run();
+    const loadPeople = useCallback(async () => {
+        const getPeopleResponse = await api.getPeople();
+        setPeople(getPeopleResponse);
     }, []);
+
+    useEffect(() => {
+        loadPeople();
+    }, [loadPeople]);
 
     return (
         <Page title="People">
-            <Button>+ Create Person</Button>
+            <Button linkTo="/new-person">+ Create Person</Button>
 
             <table>
                 <tr>
@@ -26,6 +28,7 @@ const PersonList = () => {
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Phone Number</th>
+                    <th></th>
                 </tr>
                 {people.map(person => (
                     <React.Fragment key={person.PersonId}>
@@ -34,6 +37,24 @@ const PersonList = () => {
                             <td>{person.LastName}</td>
                             <td>{person.Email}</td>
                             <td>{person.PhoneNumber}</td>
+                            <td>
+                                <div className="center">
+                                    <Button type="primary" small linkTo={`/edit-person/${person.PersonId}`}>
+                                        <FaPencil />
+                                    </Button>
+                                    {/* TODO: delete confirmation modal, or page */}
+                                    <Button
+                                        type="deny"
+                                        small
+                                        onClick={async () => {
+                                            await api.deletePerson(person.PersonId);
+                                            await loadPeople();
+                                        }}
+                                    >
+                                        <FaTrashAlt />
+                                    </Button>
+                                </div>
+                            </td>
                         </tr>
                     </React.Fragment>
                 ))}

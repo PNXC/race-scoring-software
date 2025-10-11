@@ -85,3 +85,9 @@ tr:nth-child(even) {
 tr:hover {
     background-color: #e0f0ff;
 }
+
+td .center {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}

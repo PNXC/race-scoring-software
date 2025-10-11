@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Page from "../Page";
 import api from "../../api/api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TextField from "../../components/Form/TextField";
 import TwoColumnForm from "../../components/Form/TwoColumnForm";
 import Button from "../../components/Button/Button";
@@ -10,6 +10,7 @@ interface EditPersonProps {
     isEdit?: boolean;
 }
 const EditPerson = ({ isEdit = false }: EditPersonProps) => {
+    const navigate = useNavigate();
     const { personId } = useParams();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -30,8 +31,23 @@ const EditPerson = ({ isEdit = false }: EditPersonProps) => {
         }
     }, [isEdit, personId]);
 
+    const submit = useCallback(async () => {
+        // TODO: input validation?
+        // TODO: if isEdit && !personId, should be some sort of error?
+        const person = { FirstName: firstName, LastName: lastName, Email: email, PhoneNumber: phoneNumber };
+        if (isEdit) {
+            await api.editPerson(personId!, person);
+        } else {
+            await api.createPerson(person);
+        }
+
+        navigate('/people');
+    }, [personId, firstName, lastName, email, phoneNumber, isEdit, navigate]);
+
     return (
         <Page title={isEdit ? 'Edit Person' : 'Create Person'}>
+            <Button linkTo="/people">&lt;- Go Back</Button>
+
             <TwoColumnForm>
                 <TextField name="First Name" value={firstName} setValue={setFirstName} />
                 <TextField name="Last Name" value={lastName} setValue={setLastName} />
@@ -39,7 +55,7 @@ const EditPerson = ({ isEdit = false }: EditPersonProps) => {
                 <TextField name="Phone Number" value={phoneNumber} setValue={setPhoneNumber} />
             </TwoColumnForm>
 
-            <Button>{isEdit ? 'Save' : 'Create'}</Button>
+            <Button onClick={() => submit()}>{isEdit ? 'Save' : 'Create'}</Button>
         </Page>
     )
 };
