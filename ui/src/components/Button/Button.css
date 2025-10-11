@@ -11,6 +11,11 @@ button {
     transition: 0.5s;
 }
 
+button > * {
+    vertical-align: middle;
+    margin-bottom: 2px;
+}
+
 button.small {
     padding: 6px 7px 5px 7px;
     margin-top: 3px;

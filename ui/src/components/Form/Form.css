@@ -4,3 +4,19 @@
     max-width: 30vw;
     gap: 5px;
 }
+
+input {
+    background-color: #ebe8da;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    outline: none;
+}
+input:focus {
+    background-color: #f2efe1;
+}
+input:disabled {
+    cursor: text;
+    background-color: transparent;
+    color: black; /* TODO: text color theme */
+}

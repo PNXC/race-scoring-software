@@ -9,8 +9,9 @@ function App() {
             <Routes>
                 <Route index element={<Navigate to="/people" />} />
                 <Route path="/people" element={<PersonList />} />
-                <Route path="/edit-person/:personId" element={<EditPerson isEdit />} />
-                <Route path="/new-person" element={<EditPerson />} />
+                <Route path="/edit-person/:personId" element={<EditPerson type="edit" />} />
+                <Route path="/new-person" element={<EditPerson type="create" />} />
+                <Route path="/person/:personId" element={<EditPerson type="readonly" />} />
             </Routes>
         </Router>
     );

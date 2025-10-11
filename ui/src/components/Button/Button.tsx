@@ -16,18 +16,20 @@ const Button = ({
     linkTo = null,
     small = false
 }: ButtonProps) => {
+    const content = typeof children === 'string' ? <span>{children}</span> : children;
+
     if (linkTo) {
         return (
             <a href={linkTo}>
                 <button className={cx(type, { small })}>
-                    {children}
+                    {content}
                 </button>
             </a>
         );
     } else {
         return (
             <button className={cx(type, { small })} onClick={onClick}>
-                {children}
+                {content}
             </button>
         );
     }

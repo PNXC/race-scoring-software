@@ -32,3 +32,15 @@ th.sortable {
     cursor: pointer;
     display: inline-block;
 }
+
+a.full-row-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    padding: 8px;
+}
+td:has(a) {
+    padding: 0;
+}

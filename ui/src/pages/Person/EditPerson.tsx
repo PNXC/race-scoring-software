@@ -5,57 +5,66 @@ import { useNavigate, useParams } from "react-router-dom";
 import TextField from "../../components/Form/TextField";
 import TwoColumnForm from "../../components/Form/TwoColumnForm";
 import Button from "../../components/Button/Button";
+import { IoCaretBack } from "react-icons/io5";
+import Loader from "../../components/Loader/Loader";
 
 interface EditPersonProps {
-    isEdit?: boolean;
+    type: 'readonly' | 'edit' | 'create';
 }
-const EditPerson = ({ isEdit = false }: EditPersonProps) => {
+const EditPerson = ({ type }: EditPersonProps) => {
     const navigate = useNavigate();
     const { personId } = useParams();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         async function load() {
+            setLoading(true);
             const data = await api.getPerson(personId!);
             setFirstName(data.FirstName ?? '');
             setLastName(data.LastName ?? '');
             setEmail(data.Email ?? '');
             setPhoneNumber(data.PhoneNumber ?? '');
+            setLoading(false);
         }
 
-        if (isEdit) {
+        if (type === 'edit' || type === 'readonly') {
             load();
         }
-    }, [isEdit, personId]);
+    }, [type, personId]);
 
     const submit = useCallback(async () => {
         // TODO: input validation?
         // TODO: if isEdit && !personId, should be some sort of error?
         const person = { FirstName: firstName, LastName: lastName, Email: email, PhoneNumber: phoneNumber };
-        if (isEdit) {
+        if (type === 'edit') {
             await api.editPerson(personId!, person);
-        } else {
+        } else if (type === 'create') {
             await api.createPerson(person);
         }
 
         navigate('/people');
-    }, [personId, firstName, lastName, email, phoneNumber, isEdit, navigate]);
+    }, [personId, firstName, lastName, email, phoneNumber, type, navigate]);
 
     return (
-        <Page title={isEdit ? 'Edit Person' : 'Create Person'}>
-            <Button linkTo="/people">&lt;- Go Back</Button>
+        <Page title={type === 'create' ? 'Create Person' : type === 'edit' ? 'Edit Person' : 'View Person'}>
+            <Button linkTo="/people"><IoCaretBack /><span>Go Back</span></Button>
 
-            <TwoColumnForm>
-                <TextField name="First Name" value={firstName} setValue={setFirstName} />
-                <TextField name="Last Name" value={lastName} setValue={setLastName} />
-                <TextField name="Email" value={email} setValue={setEmail} />
-                <TextField name="Phone Number" value={phoneNumber} setValue={setPhoneNumber} />
-            </TwoColumnForm>
+            {loading ? (
+                <Loader />
+            ) : (
+                <TwoColumnForm>
+                    <TextField readOnly={type === 'readonly'} name="First Name" value={firstName} setValue={setFirstName} />
+                    <TextField readOnly={type === 'readonly'} name="Last Name" value={lastName} setValue={setLastName} />
+                    <TextField readOnly={type === 'readonly'} name="Email" value={email} setValue={setEmail} />
+                    <TextField readOnly={type === 'readonly'} name="Phone Number" value={phoneNumber} setValue={setPhoneNumber} />
+                </TwoColumnForm>
+            )}
 
-            <Button onClick={() => submit()}>{isEdit ? 'Save' : 'Create'}</Button>
+            {type !== 'readonly' && <Button onClick={() => submit()}>{type === 'edit' ? 'Save' : 'Create'}</Button>}
         </Page>
     )
 };

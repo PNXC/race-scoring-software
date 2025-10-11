@@ -18,8 +18,14 @@ interface SortableTableProps<V extends Record<string, any>> {
     columns: Column<V>[];
     data: V[];
     defaultSortedColumn: keyof V;
+    rowLink?: ((row: V) => string) | undefined;
 }
-function SortableTable<V extends Record<string, any>>({ columns, data, defaultSortedColumn }: SortableTableProps<V>) {
+function SortableTable<V extends Record<string, any>>({
+    columns,
+    data,
+    defaultSortedColumn,
+    rowLink = undefined,
+}: SortableTableProps<V>) {
     const [sortedColumn, setSortedColumn] = useState<keyof V>(defaultSortedColumn);
     const [sortAsc, setSortAsc] = useState<boolean>(false);
     const [sortedData, setSortedData] = useState<V[]>(data);
@@ -67,33 +73,39 @@ function SortableTable<V extends Record<string, any>>({ columns, data, defaultSo
 
     return (
         <table>
-            <tr>
-                {columns.map((c, idx) => (
-                    <th
-                        key={idx}
-                        onClick={() => {
-                            if (c.dataSource && c.sortable) {
-                                onSortClick(c.dataSource);
-                            }
-                        }}
-                        className={cx({ sortable: c.dataSource && c.sortable })}
-                    >
-                        {c.title}
-                        {c.dataSource === sortedColumn && c.sortable && (
-                            <SortChevron column={c.dataSource} />
-                        )}
-                    </th>
-                ))}
-            </tr>
-            {sortedData.map((row, idx) => (
-                <tr key={idx}>
-                    {columns.map((col, idx) => (
-                        <td key={idx}>
-                            {col.dataSource ? row[col.dataSource] : col.content?.(row)}
-                        </td>
+            <thead>
+                <tr>
+                    {columns.map((c, idx) => (
+                        <th
+                            key={idx}
+                            onClick={() => {
+                                if (c.dataSource && c.sortable) {
+                                    onSortClick(c.dataSource);
+                                }
+                            }}
+                            className={cx({ sortable: c.dataSource && c.sortable })}
+                        >
+                            {c.title}
+                            {c.dataSource === sortedColumn && c.sortable && (
+                                <SortChevron column={c.dataSource} />
+                            )}
+                        </th>
                     ))}
                 </tr>
-            ))}
+            </thead>
+            <tbody>
+                {sortedData.map((row, idx) => (
+                    <tr key={idx}>
+                        {columns.map((col, idx) => (
+                            <td key={idx}>
+                                <a className="full-row-link" href={rowLink?.(row)}>
+                                    {col.dataSource ? row[col.dataSource] : col.content?.(row)}
+                                </a>
+                            </td>
+                        ))}
+                    </tr>
+                ))}
+            </tbody>
         </table>
     );
 }

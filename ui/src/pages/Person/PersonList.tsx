@@ -6,13 +6,17 @@ import Button from "../../components/Button/Button";
 import { FaPencil } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
 import SortableTable from "../../components/SortableTable/SortableTable";
+import Loader from "../../components/Loader/Loader";
 
 const PersonList = () => {
+    const [loading, setLoading] = useState(false);
     const [people, setPeople] = useState<PersonDto[]>([]);
 
     const loadPeople = useCallback(async () => {
+        setLoading(true);
         const getPeopleResponse = await api.getPeople();
         setPeople(getPeopleResponse);
+        setLoading(false);
     }, []);
 
     useEffect(() => {
@@ -24,50 +28,55 @@ const PersonList = () => {
             <Button linkTo="/new-person">+ Create Person</Button>
 
             {/* TODO: delete confirmation modal, or page */}
-            <SortableTable
-                defaultSortedColumn="LastName"
-                data={people}
-                columns={[
-                    {
-                        title: 'First Name',
-                        dataSource: 'FirstName',
-                        sortable: true,
-                    },
-                    {
-                        title: 'Last Name',
-                        dataSource: 'LastName',
-                        sortable: true,
-                    },
-                    {
-                        title: 'Email',
-                        dataSource: 'Email',
-                    },
-                    {
-                        title: 'Phone Number',
-                        dataSource: 'PhoneNumber',
-                    },
-                    {
-                        title: '',
-                        content: person => (
-                            <div className="center">
-                                <Button type="primary" small linkTo={`/edit-person/${person.PersonId}`}>
-                                    <FaPencil />
-                                </Button>
-                                <Button
-                                    type="deny"
-                                    small
-                                    onClick={async () => {
-                                        await api.deletePerson(person.PersonId);
-                                        await loadPeople();
-                                    }}
-                                >
-                                    <FaTrashAlt />
-                                </Button>
-                            </div>
-                        )
-                    }
-                ]}
-            />
+            {loading ? (
+                <Loader />
+            ) : (
+                <SortableTable
+                    defaultSortedColumn="LastName"
+                    data={people}
+                    rowLink={(row) => `/person/${row.PersonId}`}
+                    columns={[
+                        {
+                            title: 'First Name',
+                            dataSource: 'FirstName',
+                            sortable: true,
+                        },
+                        {
+                            title: 'Last Name',
+                            dataSource: 'LastName',
+                            sortable: true,
+                        },
+                        {
+                            title: 'Email',
+                            dataSource: 'Email',
+                        },
+                        {
+                            title: 'Phone Number',
+                            dataSource: 'PhoneNumber',
+                        },
+                        {
+                            title: '',
+                            content: person => (
+                                <div className="center">
+                                    <Button type="primary" small linkTo={`/edit-person/${person.PersonId}`}>
+                                        <FaPencil />
+                                    </Button>
+                                    <Button
+                                        type="deny"
+                                        small
+                                        onClick={async () => {
+                                            await api.deletePerson(person.PersonId);
+                                            await loadPeople();
+                                        }}
+                                    >
+                                        <FaTrashAlt />
+                                    </Button>
+                                </div>
+                            )
+                        }
+                    ]}
+                />
+            )}
         </Page>
     );
 };
