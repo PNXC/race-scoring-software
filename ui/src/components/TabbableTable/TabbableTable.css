@@ -1,0 +1,7 @@
+.cell > input {
+    background-color: transparent;
+}
+
+.cell:has(> input[type=checkbox]) {
+    text-align: center;
+}
