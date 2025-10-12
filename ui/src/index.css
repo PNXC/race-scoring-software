@@ -13,7 +13,7 @@ code {
 }
 
 .page {
-    padding: 20px 50px;
+    padding: 30px 50px;
 }
 
 .ml-5 {
@@ -73,4 +73,9 @@ code {
 
 input[type=checkbox]:disabled {
     cursor: default;
+}
+
+h1 {
+    display: table-cell;
+    vertical-align: middle;
 }

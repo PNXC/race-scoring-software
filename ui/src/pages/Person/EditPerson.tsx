@@ -7,6 +7,7 @@ import TwoColumnForm from "../../components/Form/TwoColumnForm";
 import Button from "../../components/Button/Button";
 import { IoCaretBack } from "react-icons/io5";
 import Loader from "../../components/Loader/Loader";
+import { FaUser } from "react-icons/fa";
 
 interface EditPersonProps {
     type: 'readonly' | 'edit' | 'create';
@@ -50,7 +51,10 @@ const EditPerson = ({ type }: EditPersonProps) => {
     }, [personId, firstName, lastName, email, phoneNumber, type, navigate]);
 
     return (
-        <Page title={type === 'create' ? 'Create Person' : type === 'edit' ? 'Edit Person' : 'View Person'}>
+        <Page
+            title={type === 'create' ? 'Create Person' : type === 'edit' ? 'Edit Person' : 'View Person'}
+            icon={<FaUser />}
+        >
             <Button linkTo="/people"><IoCaretBack /><span>Go Back</span></Button>
 
             {loading ? (

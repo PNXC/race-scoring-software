@@ -4,7 +4,7 @@ import { PersonDto } from "../../dto/person";
 import api from "../../api/api";
 import Button from "../../components/Button/Button";
 import { FaPencil } from "react-icons/fa6";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt, FaUser } from "react-icons/fa";
 import SortableTable from "../../components/SortableTable/SortableTable";
 import Loader from "../../components/Loader/Loader";
 
@@ -24,7 +24,7 @@ const PersonList = () => {
     }, [loadPeople]);
 
     return (
-        <Page title="People">
+        <Page title="People" icon={<FaUser />}>
             <Button linkTo="/new-person">+ Create Person</Button>
 
             {/* TODO: delete confirmation modal, or page */}
