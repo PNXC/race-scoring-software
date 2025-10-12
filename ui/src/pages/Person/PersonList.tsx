@@ -35,6 +35,13 @@ const PersonList = () => {
                     defaultSortedColumn="LastName"
                     data={people}
                     rowLink={(row) => `/person/${row.PersonId}`}
+                    searchable
+                    searchFilter={(query, row) => !!(
+                        row.FirstName?.toLowerCase().includes(query.toLowerCase()) ||
+                        row.LastName?.toLowerCase().includes(query.toLowerCase()) ||
+                        row.Email?.toLowerCase().includes(query.toLowerCase()) ||
+                        row.PhoneNumber?.toLowerCase().includes(query.toLowerCase())
+                    )}
                     columns={[
                         {
                             title: 'First Name',
