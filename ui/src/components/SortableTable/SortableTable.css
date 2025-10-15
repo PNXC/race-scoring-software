@@ -1,4 +1,4 @@
-table, th, td {
+/* table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
     padding: 5px 5px;
@@ -43,4 +43,4 @@ a.full-row-link {
 }
 td:has(a) {
     padding: 0;
-}
+} */

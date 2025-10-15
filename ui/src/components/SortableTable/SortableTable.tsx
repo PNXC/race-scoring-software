@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { IoChevronUpCircle, IoChevronDownCircle  } from "react-icons/io5";
 import cx from 'classnames';
+import { FaSearch } from "react-icons/fa";
+import useKeybind from "../../hooks/useKeybind";
+import { TextField } from "@mui/material";
 
 import './SortableTable.css';
-import useKeybind from "../../hooks/useKeybind";
 
 // TODO: these types are a bit messed up. Sortable should only be possible if dataSource is provided
 // TODO: this component only works in cases where all data is already loaded into memory
@@ -91,12 +93,18 @@ function SortableTable<V extends Record<string, any>>({
     return (
         <div>
             {searchable && (
-                <input
-                    ref={searchRef}
-                    className="mb-10"
-                    placeholder="Search..."
+                <TextField
+                    inputRef={searchRef}
+                    label="Search"
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
+                    sx={{ mb: 2 }}
+                    variant="standard"
+                    slotProps={{
+                        input: {
+                            startAdornment: <FaSearch />,
+                        },
+                    }}
                 />
             )}
             <table>

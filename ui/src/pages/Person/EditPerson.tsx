@@ -4,10 +4,10 @@ import api from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
 import TextField from "../../components/Form/TextField";
 import TwoColumnForm from "../../components/Form/TwoColumnForm";
-import Button from "../../components/Button/Button";
 import { IoCaretBack } from "react-icons/io5";
 import Loader from "../../components/Loader/Loader";
 import { FaUser } from "react-icons/fa";
+import { Button } from "@mui/material";
 
 interface EditPersonProps {
     type: 'readonly' | 'edit' | 'create';
@@ -55,7 +55,12 @@ const EditPerson = ({ type }: EditPersonProps) => {
             title={type === 'create' ? 'Create Person' : type === 'edit' ? 'Edit Person' : 'View Person'}
             icon={<FaUser />}
         >
-            <Button linkTo="/people"><IoCaretBack /><span>Go Back</span></Button>
+            <a href="/people">
+                <Button variant="contained">
+                    <IoCaretBack />
+                    <span>Go Back</span>
+                </Button>
+            </a>
 
             {loading ? (
                 <Loader />
@@ -68,7 +73,7 @@ const EditPerson = ({ type }: EditPersonProps) => {
                 </TwoColumnForm>
             )}
 
-            {type !== 'readonly' && <Button onClick={() => submit()}>{type === 'edit' ? 'Save' : 'Create'}</Button>}
+            {type !== 'readonly' && <Button variant="contained" onClick={() => submit()}>{type === 'edit' ? 'Save' : 'Create'}</Button>}
         </Page>
     )
 };
