@@ -80,8 +80,7 @@ GO
 
 CREATE TABLE [event_result] (
   [event_result_id] int PRIMARY KEY IDENTITY(1, 1),
-  [event_id] int,
-  [person_id] int,
+  [event_registration_id] int,  
   [time_seconds] int,
   [place] decimal(5,1),
   [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
@@ -94,6 +93,7 @@ GO
 CREATE TABLE [event_registration_tag] (
   [event_registration_tag_id] int PRIMARY KEY IDENTITY(1, 1),
   [event_registration_id] int,
+  [tag_type_id] int,
   [tag_id] int,
   [entry_user] nvarchar(255) NOT NULL DEFAULT SUSER_SNAME(),
   [entry_datetime] datetime2 NOT NULL DEFAULT SYSUTCDATETIME(),
@@ -116,8 +116,7 @@ CREATE TABLE [event_medal_tag] (
 GO
 
 ALTER TABLE [tag] ADD FOREIGN KEY ([tag_type_id]) REFERENCES [tag_type] ([tag_type_id]);
-ALTER TABLE [event_result] ADD FOREIGN KEY ([event_id]) REFERENCES [event] ([event_id]);
-ALTER TABLE [event_result] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id]);
+ALTER TABLE [event_result] ADD FOREIGN KEY ([event_registration_id]) REFERENCES [event_registration] ([event_registration_id]);
 ALTER TABLE [event_registration] ADD FOREIGN KEY ([event_id]) REFERENCES [event] ([event_id]);
 ALTER TABLE [event_registration] ADD FOREIGN KEY ([person_id]) REFERENCES [person] ([person_id]);
 
