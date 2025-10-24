@@ -42,7 +42,7 @@ GO
 
 DROP TABLE IF EXISTS #StagingResults;
 GO
-CREATE TABLE #StagingResults(Name VARCHAR(100), Time VARCHAR(100), Place decimal(5,1), FirstName VARCHAR(100), LastName VARCHAR(100), person_id int, time_seconds int)
+CREATE TABLE #StagingResults(Name VARCHAR(100), Time VARCHAR(100), Place decimal(5,1), FirstName VARCHAR(100), LastName VARCHAR(100), person_id int, time_seconds int, event_registration_id int)
 GO
 
 INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Cal Anderson','10:20','Jr/Sr','Male','','')
@@ -211,10 +211,7 @@ INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUE
 INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Nathan Alli','13:22','Alumni','Male','','')
 INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Jacob Czerwinski','16:02','F/S','Male','','')
 INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Jon Richardson','19:22','Alumni','Male','','')
-INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Sean Bruyere','12:22','Alumni','Male','','')
-INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Nathan Alli','13:22','Alumni','Male','','')
 INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Andre Hernandez','0:00','Alumni','Male','','')
-INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Owen Bruyere','0:00','Alumni','Male','','')
 INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Kyle Bender','14:11','Dad','Male','','')
 INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Kahlan Derose','0:00','Jr/Sr','Female','','')
 INSERT INTO #StagingPerson(Name, Time, Division, Gender, Parent1, Parent2) VALUES ('Karston Zero','15:26','Jr/Sr','Male','','')
@@ -490,14 +487,16 @@ insert into event_registration (event_id, person_id, entry_user, entry_datetime,
 select 1, person_id, 'jimgaull', getdate(), 'jimgaull', getdate()
 from Person;
 
-insert into event_registration_tag (event_registration_id, tag_id, entry_user, entry_datetime, change_user, change_datetime)
-select er.event_registration_id, sp.GenderTagId, 'jimgaull', getdate(), 'jimgaull', getdate()
+insert into event_registration_tag (event_registration_id, tag_type_id, tag_id, entry_user, entry_datetime, change_user, change_datetime)
+select er.event_registration_id, 1, sp.GenderTagId, 'jimgaull', getdate(), 'jimgaull', getdate()
 from #StagingPerson sp
 join event_registration er
 	on sp.person_id = er.person_id;
 
-insert into event_registration_tag (event_registration_id, tag_id, entry_user, entry_datetime, change_user, change_datetime)
-select er.event_registration_id, sp.DivisionTagId, 'jimgaull', getdate(), 'jimgaull', getdate()
+
+
+insert into event_registration_tag (event_registration_id, tag_type_id, tag_id, entry_user, entry_datetime, change_user, change_datetime)
+select er.event_registration_id, 2, sp.DivisionTagId, 'jimgaull', getdate(), 'jimgaull', getdate()
 from #StagingPerson sp
 join event_registration er
 	on sp.person_id = er.person_id
@@ -515,8 +514,8 @@ join tag t
 	on sc.Country = t.name
 	and t.tag_type_id = 3
 
-insert into event_registration_tag (event_registration_id, tag_id, entry_user, entry_datetime, change_user, change_datetime)
-select er.event_registration_id, sc.tag_id, 'jimgaull', getdate(), 'jimgaull', getdate()
+insert into event_registration_tag (event_registration_id, tag_type_id, tag_id, entry_user, entry_datetime, change_user, change_datetime)
+select er.event_registration_id, 3, sc.tag_id, 'jimgaull', getdate(), 'jimgaull', getdate()
 from #StagingCountry sc
 join event_registration er
 	on sc.person_id = er.person_id
@@ -609,6 +608,46 @@ join person p
 	on sr.FirstName = p.first_name
 	and sr.LastName = p.last_name
 
-insert into event_result(event_id, person_id, time_seconds, place, entry_user, entry_datetime, change_user, change_datetime)
-select 1, sr.person_id, sr.time_seconds, sr.Place, 'jimgaull', getdate(), 'jimgaull', getdate()
+update sr
+set event_registration_id = er.event_registration_id
 from #StagingResults sr
+join event_registration er
+	on sr.person_id = er.person_id
+
+insert into event_result(event_registration_id, time_seconds, place, entry_user, entry_datetime, change_user, change_datetime)
+select sr.event_registration_id, sr.time_seconds, sr.Place, 'jimgaull', getdate(), 'jimgaull', getdate()
+from #StagingResults sr
+
+select er.place, p.first_name + ' ' + p.last_name Name, 
+	CAST(er.time_seconds  / 60 AS VARCHAR(10)) + ':' +  RIGHT('0' + CAST(er.time_seconds  % 60 AS VARCHAR(2)), 2) AS MinuteSecondFormat,
+	divisiontag.Name division, gendertag.Name Gender, 
+	ISNULL(mom.first_name + ' ' + mom.last_name, '') mom1,
+	ISNULL(dad.first_name + ' ' + dad.last_name, '') dad1, 
+	ISNULL(countrytag.name, '') country
+from event_result er
+join event_registration ereg
+	on er.event_registration_id = ereg.event_registration_id
+join event e
+	on ereg.event_id = e.event_id
+join person p
+	on ereg.person_id = p.person_id
+left join event_registration_tag gender
+	on gender.event_registration_id = ereg.event_registration_id
+	and gender.tag_type_id = 1 
+left join tag gendertag
+	on gender.tag_id = gendertag.tag_id
+left join event_registration_tag division
+	on division.event_registration_id = ereg.event_registration_id
+	and division.tag_type_id = 2
+left join tag divisiontag
+	on division.tag_id = divisiontag.tag_id
+left join event_registration_tag country
+	on country.event_registration_id = ereg.event_registration_id
+	and country.tag_type_id = 3
+left join tag countrytag
+	on country.tag_id = countrytag.tag_id
+left join person mom
+	on p.mom_person_id = mom.person_id
+left join person dad
+	on p.dad_person_id	 = dad.person_id
+order by er.place
